@@ -1,0 +1,1445 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Region Car</title>
+<meta name="description" content="Детейлинг-студия Region Car: тонирование, бронирование полиуретаном, детейлинг кузова и салона. Лекала режем на плоттере, клеим в закрытом боксе.">
+<meta name="theme-color" content="#012624">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   REGION CAR
+   Reference lock: Auros — abyssal terminal (Refero style export)
+   Primary source owns: canvas, surface stack, type system,
+   radius vocabulary, accent roles, section rhythm.
+   ============================================================ */
+
+:root{
+  /* --- Colors (source tokens, roles preserved) --- */
+  --color-liquid-abyss:#012624;      /* canvas */
+  --color-liquid-deep:#011d1c;       /* recessed */
+  --color-liquid-kelp:#003734;       /* raised surface */
+  --color-liquid-mist:#edfffe;       /* emphasized body */
+  --color-platinum:#ffffff;          /* headings + nav ONLY */
+  --color-silver-mist:#bbc7c6;       /* body text */
+  --color-slate-deep:#707777;        /* low-emphasis tint */
+  --color-lavender-phosphor:#fde9ff; /* large statistics ONLY */
+
+  --gradient-bioluminescent:linear-gradient(90deg,rgb(0,130,124) 0%,rgb(203,255,252) 100%);
+  --gradient-aurora:linear-gradient(90deg,rgb(203,255,252) 0%,rgb(237,255,254) 26.25%,rgb(255,253,250) 47.57%,rgb(250,209,255) 88.96%);
+
+  --hairline:rgba(255,255,255,.1);
+  --arrow-fill:rgba(3,81,75,.5);
+
+  /* --- Type --- */
+  --font-matter:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --fw-regular:400;
+  --fw-medium:500;
+
+  --text-caption:10px;  --leading-caption:1.4; --tracking-caption:.15em;
+  --text-body:16px;     --leading-body:1.4;
+  --text-subheading:24px; --leading-subheading:1.3; --tracking-subheading:-.02em;
+  --text-heading:36px;  --leading-heading:1;
+
+  /* --- Spacing --- */
+  --spacing-12:12px; --spacing-16:16px; --spacing-20:20px; --spacing-24:24px;
+  --spacing-28:28px; --spacing-32:32px; --spacing-36:36px; --spacing-40:40px;
+  --spacing-48:48px; --spacing-64:64px; --spacing-80:80px; --spacing-120:120px;
+  --spacing-140:140px; --spacing-160:160px;
+
+  /* --- Layout --- */
+  --page-max-width:1440px;
+  --gutter:clamp(16px,4vw,64px);
+  --section-gap:clamp(68px,9vw,140px);
+
+  /* --- Radius: the complete shape vocabulary is two values --- */
+  --radius-cards:16px;
+  --radius-small:6px;
+
+  /* --- Motion --- */
+  --duration-fast:120ms;
+  --duration-default:200ms;
+  --duration-slow:320ms;
+  --ease-out:cubic-bezier(0,0,.2,1);
+  --ease-in-out:cubic-bezier(.4,0,.2,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+html{
+  -webkit-text-size-adjust:100%;
+  scroll-behavior:smooth;
+  background:var(--color-liquid-abyss);
+  overflow-x:hidden;
+  overflow-x:clip;
+}
+
+body{
+  margin:0;
+  font-family:var(--font-matter);
+  font-weight:var(--fw-regular);
+  font-size:var(--text-body);
+  line-height:var(--leading-body);
+  color:var(--color-silver-mist);
+  background:var(--color-liquid-abyss);
+  overflow-x:hidden;
+  overflow-x:clip;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+ol,ul{margin:0;padding:0;list-style:none}
+h1,h2,h3,h4,p,figure,figcaption{margin:0}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* Fixed 80px header must not cover anchor targets */
+[id]{scroll-margin-top:104px}
+
+:focus-visible{
+  outline:2px solid rgb(203,255,252);
+  outline-offset:3px;
+  border-radius:var(--radius-small);
+}
+
+.shell{
+  width:100%;
+  max-width:var(--page-max-width);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:100;
+  padding:12px 20px;background:var(--color-liquid-kelp);
+  color:var(--color-platinum);border-radius:var(--radius-small);
+}
+.skip:focus{left:var(--gutter);top:12px}
+
+/* ============================================================
+   TYPE PRIMITIVES
+   Medium weight (500) only at display sizes. No bold, no light.
+   ============================================================ */
+
+.kicker{
+  font-size:var(--text-caption);
+  font-weight:var(--fw-medium);
+  letter-spacing:var(--tracking-caption);
+  text-transform:uppercase;
+  color:var(--color-silver-mist);
+}
+.kicker--mist{color:var(--color-liquid-mist)}
+
+.label{
+  font-size:12px;
+  font-weight:var(--fw-medium);
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.h1{
+  font-size:clamp(2.05rem,6.6vw,3.8rem);
+  font-weight:var(--fw-medium);
+  line-height:1.02;
+  letter-spacing:-.04em;
+  color:var(--color-platinum);
+  text-wrap:balance;
+}
+
+.h2{
+  font-size:clamp(2.1rem,4.6vw,3rem);
+  font-weight:var(--fw-medium);
+  line-height:1;
+  letter-spacing:-.035em;
+  color:var(--color-platinum);
+  text-wrap:balance;
+}
+
+.h3{
+  font-size:clamp(1.5rem,2.6vw,var(--text-heading));
+  font-weight:var(--fw-medium);
+  line-height:1;
+  letter-spacing:-.02em;
+  color:var(--color-platinum);
+  text-wrap:balance;
+}
+
+.lede{
+  font-size:clamp(1rem,1.5vw,1.25rem);
+  line-height:1.5;
+  color:var(--color-liquid-mist);
+  text-wrap:pretty;
+}
+
+.body{color:var(--color-silver-mist);text-wrap:pretty}
+
+/* ============================================================
+   BUTTONS
+   Aurora gradient is reserved for the primary CTA. Nothing else.
+   ============================================================ */
+
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  border-radius:var(--radius-small);
+  font-size:14px;letter-spacing:.06em;text-transform:uppercase;
+  white-space:nowrap;
+  transition:transform 90ms var(--ease-out),
+             background-color var(--duration-fast) var(--ease-out),
+             border-color var(--duration-fast) var(--ease-out),
+             color var(--duration-fast) var(--ease-out),
+             filter var(--duration-fast) var(--ease-out);
+}
+.btn:active{transform:scale(.98)}
+
+.btn--primary{
+  padding:16px 22px;
+  background-image:var(--gradient-aurora);
+  color:#222222;
+  font-weight:var(--fw-medium);
+}
+.btn--primary:hover{filter:brightness(1.07)}
+
+.btn--lg{padding:20px 32px;font-size:15px}
+
+.btn--ghost{
+  padding:16px 22px;
+  border:1px solid var(--hairline);
+  color:var(--color-platinum);
+}
+.btn--ghost:hover{background-color:var(--color-liquid-kelp);border-color:transparent}
+
+.btn__icon{width:16px;height:16px;flex:none}
+
+/* Arrow trigger — 32x32, 6px, semi-transparent kelp */
+.arrow{
+  width:32px;height:32px;flex:none;
+  display:grid;place-items:center;
+  border-radius:var(--radius-small);
+  background-color:var(--arrow-fill);
+  color:var(--color-platinum);
+  transition:background-color var(--duration-fast) var(--ease-out),
+             transform var(--duration-fast) var(--ease-out);
+}
+.arrow svg{width:14px;height:14px}
+
+/* ============================================================
+   HEX LIGHT GRID — the bay's LED ceiling, as a code-native motif
+   ============================================================ */
+
+.hexfield{
+  position:absolute;inset:0;
+  pointer-events:none;
+  color:rgb(203,255,252);
+  opacity:.1;
+}
+.hexfield svg{width:100%;height:100%;display:block}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.header{
+  position:fixed;inset:0 0 auto;z-index:50;
+  height:80px;
+  display:flex;align-items:center;
+  transition:background-color var(--duration-slow) var(--ease-out),
+             border-color var(--duration-slow) var(--ease-out);
+  border-bottom:1px solid transparent;
+}
+.header.is-stuck{
+  background-color:rgba(1,29,28,.86);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom-color:var(--hairline);
+}
+.header__inner{
+  display:flex;align-items:center;gap:var(--spacing-24);
+  width:100%;max-width:var(--page-max-width);margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+
+.brand{display:flex;align-items:center;gap:10px;flex:none}
+.brand__mark{width:34px;height:20px;color:rgb(203,255,252);flex:none}
+.brand__name{
+  font-size:15px;font-weight:var(--fw-medium);
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--color-platinum);
+}
+
+.nav{display:flex;gap:var(--spacing-24);margin-inline:auto}
+.nav a{
+  font-size:12px;font-weight:var(--fw-regular);
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--color-silver-mist);
+  transition:color var(--duration-fast) var(--ease-out);
+}
+.nav a:hover{color:var(--color-platinum)}
+
+.header__cta{flex:none}
+.header__tel{
+  flex:none;font-size:14px;letter-spacing:.02em;
+  color:var(--color-platinum);
+  transition:color var(--duration-fast) var(--ease-out);
+}
+.header__tel:hover{color:rgb(203,255,252)}
+
+@media (max-width:959px){
+  .nav{display:none}
+  .header__inner{justify-content:space-between}
+  .header__tel{margin-left:auto}
+}
+@media (max-width:539px){
+  .header__cta{display:none}
+}
+
+/* ============================================================
+   MOBILE ACTION BAR
+   The desktop nav and header CTA collapse on a phone, so booking
+   gets its own permanently reachable bar.
+   ============================================================ */
+
+.mobilebar{display:none}
+
+@media (max-width:767px){
+  .mobilebar{
+    display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    padding:12px var(--gutter);
+    padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));
+    background-color:rgba(1,29,28,.93);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-top:1px solid var(--hairline);
+  }
+  .mobilebar .btn--primary{justify-content:center;padding:15px 18px}
+  .mobilebar__tel{
+    display:grid;place-items:center;
+    width:50px;height:50px;flex:none;
+    border:1px solid var(--hairline);
+    border-radius:var(--radius-small);
+    color:var(--color-platinum);
+  }
+  .mobilebar__tel svg{width:20px;height:20px}
+  body{padding-bottom:86px}
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.hero{
+  position:relative;
+  min-height:100svh;
+  display:flex;align-items:flex-end;
+  padding-block:140px var(--spacing-64);
+  overflow:hidden;
+}
+.hero__media{position:absolute;inset:0;z-index:0}
+.hero__media img{width:100%;height:100%;object-fit:cover;object-position:50% 58%}
+/* Let the bay read through the middle; darken only where type sits. */
+.hero__media::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,
+    rgba(1,38,36,.66) 0%,
+    rgba(1,38,36,.20) 26%,
+    rgba(1,38,36,.32) 50%,
+    rgba(1,38,36,.90) 80%,
+    rgba(1,38,36,1) 100%);
+}
+.hero__inner{position:relative;z-index:1;width:100%}
+.hero__grid{
+  display:grid;gap:var(--spacing-40);
+  grid-template-columns:minmax(0,1fr);
+  align-items:end;
+}
+@media (min-width:960px){
+  .hero__grid{grid-template-columns:minmax(0,7fr) minmax(0,4fr)}
+}
+.hero__title{margin-top:var(--spacing-24)}
+@media (min-width:768px){.hero__title{max-width:16ch}}
+
+/* On a phone the whole frame is visible, bright LED ceiling included,
+   so the scrim has to carry the text instead of the crop. */
+@media (max-width:767px){
+  .hero__media::after{
+    background:linear-gradient(180deg,
+      rgba(1,38,36,.82) 0%,
+      rgba(1,38,36,.56) 18%,
+      rgba(1,38,36,.58) 40%,
+      rgba(1,38,36,.93) 70%,
+      rgba(1,38,36,1) 100%);
+  }
+}
+.hero__lede{margin-top:var(--spacing-24);max-width:46ch}
+.hero__actions{
+  display:flex;flex-wrap:wrap;gap:var(--spacing-12);
+  margin-top:var(--spacing-32);
+}
+.hero__note{
+  display:flex;align-items:center;gap:10px;
+  margin-top:var(--spacing-20);
+  font-size:13px;color:var(--color-silver-mist);
+}
+.hero__dot{
+  width:6px;height:6px;border-radius:50%;flex:none;
+  background:rgb(203,255,252);
+}
+
+/* ============================================================
+   STATS — lavender-phosphor is for these numbers and nothing else
+   ============================================================ */
+
+.stats{
+  display:grid;gap:var(--spacing-32);
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  padding-block:clamp(48px,7vw,80px);
+  border-bottom:1px solid var(--hairline);
+}
+.stat__num{
+  font-size:clamp(3rem,7vw,5.375rem);
+  font-weight:var(--fw-medium);
+  line-height:1;letter-spacing:-.046em;
+  color:var(--color-lavender-phosphor);
+}
+.stat__unit{font-size:.36em;letter-spacing:0}
+.stat__label{
+  margin-top:var(--spacing-12);
+  font-size:13px;font-weight:var(--fw-regular);
+  letter-spacing:.055em;text-transform:uppercase;
+  color:var(--color-liquid-mist);
+}
+
+/* ============================================================
+   SECTION SHELL
+   ============================================================ */
+
+.section{padding-block:var(--section-gap)}
+.section__head{
+  display:grid;gap:var(--spacing-20);
+  max-width:640px;
+  margin-bottom:var(--spacing-64);
+}
+
+/* ============================================================
+   SERVICES — feature rows, not a card grid
+   ============================================================ */
+
+.services{display:grid;gap:var(--spacing-40)}
+@media (min-width:960px){
+  .services{grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:var(--spacing-80);align-items:start}
+}
+
+.svc{
+  display:block;
+  border-top:1px solid var(--hairline);
+  padding-block:var(--spacing-48);
+  transition:background-color var(--duration-default) var(--ease-out);
+}
+.svc:last-child{border-bottom:1px solid var(--hairline)}
+.svc__top{display:flex;align-items:flex-start;gap:var(--spacing-20)}
+.svc__title{flex:1;min-width:0}
+.svc:hover .arrow{background-color:rgb(0,130,124);transform:translate(2px,-2px)}
+.svc__body{margin-top:var(--spacing-20);max-width:52ch}
+.svc__meta{
+  display:flex;flex-wrap:wrap;gap:var(--spacing-12) var(--spacing-24);
+  margin-top:var(--spacing-24);
+}
+.svc__meta span{
+  font-size:var(--text-caption);
+  letter-spacing:var(--tracking-caption);
+  text-transform:uppercase;
+  color:var(--color-silver-mist);
+}
+
+/* Molecular diagram column */
+.molecule{
+  position:sticky;top:120px;
+  color:var(--color-platinum);
+  opacity:.8;
+}
+.molecule svg{width:100%;height:auto}
+.molecule__cap{
+  margin-top:var(--spacing-20);
+  font-size:var(--text-caption);
+  letter-spacing:var(--tracking-caption);
+  text-transform:uppercase;
+  color:var(--color-silver-mist);
+}
+@media (max-width:959px){.molecule{display:none}}
+
+/* ============================================================
+   PROCESS — scroll-driven scene
+   ============================================================ */
+
+.proc{position:relative}
+.proc__head{padding-block:var(--section-gap) var(--spacing-40)}
+/* The oversized section marker is decorative and deliberately wider than
+   the column, so its own box clips it instead of widening the document. */
+.proc__headinner{position:relative;overflow:hidden}
+
+.proc__ghost{
+  position:absolute;left:0;right:0;top:0;
+  font-size:clamp(4rem,15vw,11rem);
+  font-weight:var(--fw-medium);
+  line-height:1;letter-spacing:-.046em;
+  color:var(--color-platinum);
+  opacity:.04;
+  white-space:nowrap;
+  pointer-events:none;
+  user-select:none;
+}
+
+/* The track length is what the scroll progress is measured against,
+   so it must exist on phones too or the scene would snap step 1 -> 6. */
+.proc__track{position:relative;height:calc(100svh + var(--steps,6) * 54svh)}
+@media (min-width:768px){
+  .proc__track{height:calc(100vh + var(--steps,6) * 68vh)}
+}
+
+.proc__viewport{
+  position:sticky;top:0;
+  min-height:100svh;
+  display:grid;align-content:center;gap:var(--spacing-32);
+  padding-block:96px var(--spacing-48);
+}
+@media (min-width:768px){
+  .proc__viewport{
+    grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+    align-items:center;gap:var(--spacing-64);
+  }
+}
+
+/* --- Stage --- */
+.stage{position:relative}
+.stage__field{
+  position:relative;
+  border-radius:var(--radius-cards);
+  background-color:var(--color-liquid-kelp);
+  padding:var(--spacing-24);
+  overflow:hidden;
+}
+.stage__car{width:100%;height:auto;display:block;position:relative;z-index:1}
+
+.stage__readout{
+  display:flex;align-items:baseline;gap:12px;
+  margin-top:var(--spacing-24);
+}
+.stage__value{
+  font-size:clamp(2.5rem,6vw,4rem);
+  font-weight:var(--fw-medium);
+  line-height:1;letter-spacing:-.046em;
+  color:var(--color-lavender-phosphor);
+  font-variant-numeric:tabular-nums;
+}
+.stage__unit{
+  font-size:13px;line-height:1.4;letter-spacing:.055em;text-transform:uppercase;
+  color:var(--color-liquid-mist);
+}
+.stage__note{
+  margin-top:var(--spacing-12);
+  font-size:13px;
+  color:var(--color-silver-mist);
+}
+
+/* --- Step list --- */
+.steps{display:grid;gap:var(--spacing-16)}
+
+.step{
+  display:grid;grid-template-columns:auto 1fr;gap:var(--spacing-20);
+  align-items:start;
+  padding:var(--spacing-16) 0;
+  opacity:.32;
+  transition:opacity var(--duration-slow) var(--ease-out);
+}
+.step.is-active{opacity:1}
+.step.is-done{opacity:.5}
+
+.step__idx{
+  font-size:var(--text-caption);
+  letter-spacing:var(--tracking-caption);
+  color:var(--color-silver-mist);
+  padding-top:5px;
+  font-variant-numeric:tabular-nums;
+}
+.step.is-active .step__idx{color:rgb(203,255,252)}
+.step__title{
+  font-size:var(--text-subheading);
+  font-weight:var(--fw-medium);
+  line-height:var(--leading-subheading);
+  letter-spacing:var(--tracking-subheading);
+  color:var(--color-platinum);
+}
+.step__text{margin-top:10px;max-width:42ch}
+
+/* progress rail */
+.rail{
+  position:relative;height:1px;width:100%;
+  background-color:var(--hairline);
+  margin-bottom:var(--spacing-24);
+}
+.rail__fill{
+  position:absolute;inset:0 auto 0 0;
+  width:calc(var(--p,0) * 100%);
+  background-image:var(--gradient-bioluminescent);
+}
+
+/* Mobile: same sticky scene, stacked — stage on top, one step at a time */
+@media (max-width:767px){
+  .proc__viewport{
+    grid-template-columns:minmax(0,1fr);
+    padding-block:96px 104px;
+    gap:var(--spacing-24);
+  }
+  .steps{gap:0;position:relative;min-height:220px}
+  .step{
+    position:absolute;inset:0;opacity:0;
+    pointer-events:none;
+  }
+  .step.is-active{opacity:1;pointer-events:auto}
+  .step.is-done{opacity:0}
+}
+
+/* ============================================================
+   WORK — asymmetric, not a uniform grid
+   ============================================================ */
+
+.work{display:grid;gap:var(--spacing-20)}
+/* Sources are all portrait, so the grid stays portrait and gets its
+   tension from a stagger instead of from cropping to landscape. */
+@media (min-width:600px){
+  .work{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .work__item:nth-child(2n){margin-top:var(--spacing-48)}
+}
+@media (min-width:1100px){
+  .work{grid-template-columns:repeat(4,minmax(0,1fr));align-items:start}
+  .work__item:nth-child(2n){margin-top:0}
+  .work__item:nth-child(2),
+  .work__item:nth-child(4){margin-top:var(--spacing-64)}
+}
+
+.shot{
+  position:relative;
+  border-radius:var(--radius-cards);
+  overflow:hidden;
+  background-color:var(--color-liquid-deep);
+  aspect-ratio:3/4;
+}
+.shot img{width:100%;height:100%;object-fit:cover}
+
+/* Intentional placeholder while a photo is missing */
+.shot::before{
+  content:attr(data-art);
+  position:absolute;inset:0;z-index:0;
+  display:grid;place-content:center;align-content:center;
+  padding:var(--spacing-24);
+  font-size:var(--text-caption);
+  letter-spacing:var(--tracking-caption);
+  text-transform:uppercase;
+  color:var(--color-silver-mist);
+  text-align:center;
+  border:1px dashed rgba(255,255,255,.12);
+  border-radius:var(--radius-cards);
+}
+.shot img{position:relative;z-index:1}
+
+.shot__cap{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;
+  padding:var(--spacing-20);
+  font-size:var(--text-caption);
+  letter-spacing:var(--tracking-caption);
+  text-transform:uppercase;
+  color:var(--color-liquid-mist);
+  background:linear-gradient(180deg,transparent,rgba(1,29,28,.88));
+}
+
+/* ============================================================
+   BOOKING — recessed well
+   ============================================================ */
+
+.book{
+  background-color:var(--color-liquid-deep);
+  border-radius:var(--radius-cards);
+  padding:clamp(40px,8vw,120px) clamp(24px,5vw,80px);
+  position:relative;overflow:hidden;
+}
+.book__inner{position:relative;z-index:1;max-width:600px}
+.book__actions{display:flex;flex-wrap:wrap;gap:var(--spacing-12);margin-top:var(--spacing-32)}
+.book__fine{
+  margin-top:var(--spacing-24);
+  font-size:13px;color:var(--color-silver-mist);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer{
+  background-color:var(--color-liquid-deep);
+  padding-block:var(--spacing-80) var(--spacing-48);
+  margin-top:var(--section-gap);
+}
+.footer__grid{
+  display:grid;gap:var(--spacing-40);
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+}
+.footer__col h4{
+  margin:0 0 var(--spacing-20);
+  font-size:var(--text-caption);
+  font-weight:var(--fw-medium);
+  letter-spacing:var(--tracking-caption);
+  text-transform:uppercase;
+  color:var(--color-silver-mist);
+}
+.footer__col li+li{margin-top:12px}
+.footer__col a{
+  color:var(--color-silver-mist);
+  transition:color var(--duration-fast) var(--ease-out);
+}
+.footer__col a:hover{color:var(--color-platinum)}
+.footer__bottom{
+  display:flex;flex-wrap:wrap;gap:var(--spacing-16);
+  justify-content:space-between;
+  margin-top:var(--spacing-80);
+  padding-top:var(--spacing-24);
+  border-top:1px solid var(--hairline);
+  font-size:13px;color:var(--color-silver-mist);
+}
+
+/* ============================================================
+   REVEAL
+   ============================================================ */
+
+.reveal{
+  opacity:0;transform:translateY(16px);
+  transition:opacity var(--duration-slow) var(--ease-out),
+             transform var(--duration-slow) var(--ease-out);
+}
+.reveal.is-in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+  .reveal{opacity:1;transform:none}
+  .proc__track{height:auto !important}
+  .proc__viewport{position:static;min-height:0}
+  .steps{position:static;min-height:0;gap:var(--spacing-24)}
+  .step{position:static;opacity:1 !important;pointer-events:auto}
+  .stage{position:static}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">К содержанию</a>
+
+<!-- Shared hexagon tile — the bay's LED ceiling, reused by every .hexfield -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <pattern id="hex" width="180" height="103.92" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M60 51.96 30 103.92 -30 103.92 -60 51.96 -30 0 30 0Z"/>
+        <path d="M240 51.96 210 103.92 150 103.92 120 51.96 150 0 210 0Z"/>
+        <path d="M150 0 120 51.96 60 51.96 30 0 60 -51.96 120 -51.96Z"/>
+        <path d="M150 103.92 120 155.88 60 155.88 30 103.92 60 51.96 120 51.96Z"/>
+      </g>
+    </pattern>
+  </defs>
+</svg>
+
+<!-- ============================ HEADER ============================ -->
+<header class="header" id="header">
+  <div class="header__inner">
+    <a class="brand" href="#top" aria-label="Region Car — на главную">
+      <svg class="brand__mark" viewBox="0 0 68 40" fill="none" aria-hidden="true">
+        <path d="M2 30c10-16 24-24 32-24s24 8 32 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M14 30c6-9 14-14 20-14s14 5 20 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+        <path d="M26 30c3-4 6-6 8-6s5 2 8 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".35"/>
+      </svg>
+      <span class="brand__name">Region Car</span>
+    </a>
+
+    <nav class="nav" aria-label="Основная навигация">
+      <a href="#services">Услуги</a>
+      <a href="#tint">Тонирование</a>
+      <a href="#ppf">Бронирование</a>
+      <a href="#work">Работы</a>
+      <a href="#book">Контакты</a>
+    </nav>
+
+    <a class="header__tel" href="tel:+79620066644">8 962 006-66-44</a>
+    <a class="btn btn--primary header__cta" href="https://t.me/+79620066644" target="_blank" rel="noopener">Записаться</a>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================ HERO ============================ -->
+<section class="hero" id="top">
+  <div class="hero__media">
+    <img src="images/hero-bay.jpg" alt="Чёрный BMW в боксе Region Car под гексагональным LED-светом" fetchpriority="high" decoding="async">
+  </div>
+
+  <!-- No hex overlay here: the photographed LED ceiling already carries the motif. -->
+
+  <div class="hero__inner shell">
+    <div class="hero__grid">
+      <div>
+        <p class="kicker">Детейлинг-студия · 26 регион</p>
+        <h1 class="h1 hero__title">Плёнка без пузырей. Кромка без подрезов.</h1>
+        <p class="lede hero__lede">
+          Тонирование, бронирование полиуретаном и детейлинг. Лекала режем на плоттере
+          под вашу модель, клеим в закрытом боксе — ножом по стеклу и кузову не работаем.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="https://t.me/+79620066644" target="_blank" rel="noopener">
+            <svg class="btn__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M21.9 4.3 18.8 19c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.3 12.7 1.5 11.2c-1-.3-1-1 .2-1.5l19-7.3c.9-.3 1.6.2 1.2 1.9Z"/>
+            </svg>
+            Записаться в Telegram
+          </a>
+          <a class="btn btn--ghost btn--lg" href="tel:+79620066644">
+            <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <path d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 6.5 6.5L17 13l4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 5.2 2 2 0 0 1 5 3h1.5Z" stroke-linejoin="round"/>
+            </svg>
+            8 962 006-66-44
+          </a>
+        </div>
+        <p class="hero__note"><span class="hero__dot" aria-hidden="true"></span> Запись на ближайшие дни открыта</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ЗАГЛУШКА: подтвердить реальные цифры перед публикацией -->
+<section class="shell">
+  <div class="stats reveal">
+    <div class="stat">
+      <p class="stat__num">200<span class="stat__unit"> мкм</span></p>
+      <p class="stat__label">Толщина полиуретана</p>
+    </div>
+    <div class="stat">
+      <p class="stat__num">1<span class="stat__unit"> день</span></p>
+      <p class="stat__label">Срок тонирования</p>
+    </div>
+    <div class="stat">
+      <p class="stat__num">5<span class="stat__unit"> лет</span></p>
+      <p class="stat__label">Гарантия на плёнку</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ SERVICES ============================ -->
+<section class="section shell" id="services">
+  <div class="section__head reveal">
+    <p class="kicker">Услуги</p>
+    <h2 class="h2">Три вещи, которые мы делаем хорошо</h2>
+    <p class="body">
+      Не берём всё подряд. Тонирование, полиуретан и подготовка кузова под них —
+      это один технологический процесс, и он у нас отлажен.
+    </p>
+  </div>
+
+  <div class="services">
+    <div>
+      <a class="svc reveal" href="#tint">
+        <div class="svc__top">
+          <div class="svc__title"><h3 class="h3">Тонирование</h3></div>
+          <span class="arrow" aria-hidden="true">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12 12 4M6 4h6v6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <p class="body svc__body">
+          Атермальная и съёмная. Передние стёкла — по ГОСТу, светопропускание меряем
+          прибором при вас. Задняя полусфера — на выбор по проценту.
+        </p>
+        <p class="svc__meta"><span>Атермальная</span><span>Съёмная</span><span>Хамелеон</span><span>Замер прибором</span></p>
+      </a>
+
+      <a class="svc reveal" href="#ppf">
+        <div class="svc__top">
+          <div class="svc__title"><h3 class="h3">Бронирование</h3></div>
+          <span class="arrow" aria-hidden="true">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12 12 4M6 4h6v6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <p class="body svc__body">
+          Полиуретан на зоны риска или кузов целиком. Края заворачиваем под кромку
+          панели — стыка на торце не видно. Держит скол от щебня на трассе.
+        </p>
+        <p class="svc__meta"><span>Зоны риска</span><span>Полный кузов</span><span>Антихром</span><span>Фары</span></p>
+      </a>
+
+      <a class="svc reveal" href="#book">
+        <div class="svc__top">
+          <div class="svc__title"><h3 class="h3">Детейлинг</h3></div>
+          <span class="arrow" aria-hidden="true">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12 12 4M6 4h6v6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <p class="body svc__body">
+          Полировка, химчистка салона, керамика. Перед плёнкой кузов полируем всегда:
+          полиуретан прозрачный, и любая риска под ним останется навсегда.
+        </p>
+        <p class="svc__meta"><span>Полировка</span><span>Химчистка</span><span>Керамика</span><span>Предпродажная</span></p>
+      </a>
+    </div>
+
+    <aside class="molecule" aria-hidden="true">
+      <svg viewBox="0 0 340 300" fill="none">
+        <g stroke="currentColor" stroke-width="1" opacity=".45">
+          <path d="M60 60 170 40 280 90 170 150 60 60M170 150 170 260M170 150 290 210M170 150 50 200M280 90 290 210M60 60 50 200"/>
+        </g>
+        <g fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="170" cy="40" r="9"/><circle cx="280" cy="90" r="6"/>
+          <circle cx="60" cy="60" r="6"/><circle cx="50" cy="200" r="6"/>
+          <circle cx="290" cy="210" r="9"/><circle cx="170" cy="260" r="6"/>
+        </g>
+        <circle cx="170" cy="150" r="16" fill="currentColor" opacity=".9"/>
+        <circle cx="170" cy="150" r="30" fill="none" stroke="currentColor" stroke-width="1" opacity=".35"/>
+      </svg>
+      <p class="molecule__cap">Один процесс — подготовка, раскрой, оклейка</p>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================ PROCESS: TINT ============================ -->
+<section class="proc" id="tint" data-proc data-mode="tint" style="--steps:6">
+  <div class="shell proc__head">
+    <div class="proc__headinner">
+      <p class="proc__ghost" aria-hidden="true">ТОНИРОВАНИЕ</p>
+      <div class="section__head reveal" style="margin-bottom:0;position:relative">
+        <p class="kicker">Процесс · 06 шагов</p>
+        <h2 class="h2">Как мы тонируем</h2>
+        <p class="body">Прокрутите — увидите, что происходит со стеклом на каждом шаге.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="proc__track">
+    <div class="proc__viewport shell">
+      <div class="stage">
+        <div class="stage__field">
+          <div class="hexfield" style="opacity:.07" aria-hidden="true">
+            <svg preserveAspectRatio="xMidYMid slice" viewBox="0 0 900 460"><rect width="900" height="460" fill="url(#hex)"/></svg>
+          </div>
+
+          <svg class="stage__car" viewBox="0 0 900 400" fill="none" role="img"
+               aria-label="Схема седана в профиль: по мере выполнения шагов стёкла задней полусферы затемняются, передние остаются светлыми по ГОСТу">
+
+            <path d="M60 318H840" stroke="#ffffff" stroke-width="1" opacity=".16"/>
+
+            <!-- Front half: ГОСТ caps how dark this may go -->
+            <g class="glass glass--front" fill="#02100f" fill-opacity=".05"
+               stroke="rgb(203,255,252)" stroke-width="1.5" stroke-linejoin="round">
+              <path d="M350 196L424 124L444 124L370 196Z"/>
+              <path d="M380 196L452 124L500 124L500 196Z"/>
+            </g>
+            <!-- Rear half: free choice of percentage -->
+            <g class="glass glass--rear" fill="#02100f" fill-opacity=".05"
+               stroke="rgb(203,255,252)" stroke-width="1.5" stroke-linejoin="round">
+              <path d="M512 124L512 196L562 196L562 124Z"/>
+              <path d="M574 128L638 196L574 196Z"/>
+            </g>
+
+            <!-- Body silhouette -->
+            <path d="M115 296L117 266L128 244L196 230L330 206L348 198L424 122L566 120L650 198L744 192L776 200L784 226L782 284L752 296L694 296L688 274A54 54 0 0 0 580 274L574 296L302 296L296 274A54 54 0 0 0 188 274L182 296Z"
+                  stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+
+            <g stroke="#ffffff" stroke-linecap="round">
+              <path d="M348 198H650" stroke-width="1.5" opacity=".5"/>
+              <path d="M380 198L376 282M506 198L504 284M568 198L570 282" stroke-width="1.2" opacity=".35"/>
+              <path d="M420 218h30M528 218h30" stroke-width="2" opacity=".5"/>
+            </g>
+
+            <g stroke="#ffffff" stroke-width="1.5" fill="#012624" stroke-linejoin="round">
+              <path d="M119 254L158 248L162 262L121 268Z"/>
+              <path d="M780 244L746 240L744 254L778 258Z"/>
+              <path d="M378 192L352 184L346 196L376 202Z"/>
+            </g>
+
+            <g stroke="#ffffff" fill="#012624">
+              <circle cx="242" cy="274" r="44" stroke-width="2"/>
+              <circle cx="242" cy="274" r="24" stroke-width="1.5" opacity=".45"/>
+              <circle cx="634" cy="274" r="44" stroke-width="2"/>
+              <circle cx="634" cy="274" r="24" stroke-width="1.5" opacity=".45"/>
+            </g>
+
+            <!-- Plotter cut, drawn during step 03 -->
+            <path class="cutline" d="M380 196L452 124L500 124L500 196Z" pathLength="1"
+                  stroke="rgb(203,255,252)" stroke-width="3" fill="none"
+                  stroke-dasharray="1" stroke-dashoffset="1"/>
+            <!-- Squeegee pass, step 05 -->
+            <rect class="sweep" x="512" y="120" width="4" height="78" fill="rgb(203,255,252)" opacity="0"/>
+          </svg>
+        </div>
+
+        <div class="stage__readout">
+          <span class="stage__value" data-readout>95</span>
+          <span class="stage__unit">% светопропускания<br>задней полусферы</span>
+        </div>
+        <p class="stage__note">Передние стёкла остаются по ГОСТу — не темнее 70%.</p>
+      </div>
+
+      <div>
+        <div class="rail" aria-hidden="true"><span class="rail__fill"></span></div>
+        <ol class="steps">
+          <li class="step">
+            <span class="step__idx">01</span>
+            <div>
+              <h3 class="step__title">Замер</h3>
+              <p class="body step__text">Меряем светопропускание прибором до работы. Показываем, что пройдёт по ГОСТу, а что нет — решаете вы.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__idx">02</span>
+            <div>
+              <h3 class="step__title">Мойка стекла</h3>
+              <p class="body step__text">Снимаем уплотнители, вымываем кромку и направляющие. Девять из десяти дефектов — это пыль, попавшая под плёнку.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__idx">03</span>
+            <div>
+              <h3 class="step__title">Выкройка</h3>
+              <p class="body step__text">Плоттер режет лекало под вашу модель. Нож к стеклу не подносим — резать по месту значит царапать.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__idx">04</span>
+            <div>
+              <h3 class="step__title">Термоформовка</h3>
+              <p class="body step__text">Садим плёнку феном на внешнюю сторону — она принимает двойную кривизну стекла и перестаёт тянуть складку.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__idx">05</span>
+            <div>
+              <h3 class="step__title">Поклейка</h3>
+              <p class="body step__text">Клеим изнутри на мыльный раствор, выгоняем воду от центра к краям. Бокс закрыт, воздух без пыли.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__idx">06</span>
+            <div>
+              <h3 class="step__title">Сушка</h3>
+              <p class="body step__text">Двое суток не опускать стёкла. Через неделю клей встаёт полностью — дальше плёнка живёт столько же, сколько стекло.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PROCESS: PPF ============================ -->
+<section class="proc" id="ppf" data-proc data-mode="ppf" style="--steps:6">
+  <div class="shell proc__head">
+    <div class="proc__headinner">
+      <p class="proc__ghost" aria-hidden="true">БРОНИРОВАНИЕ</p>
+      <div class="section__head reveal" style="margin-bottom:0;position:relative">
+        <p class="kicker">Процесс · 06 шагов</p>
+        <h2 class="h2">Как мы бронируем</h2>
+        <p class="body">Полиуретан ложится по зонам. Прокрутите — увидите порядок.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="proc__track">
+    <div class="proc__viewport shell">
+      <div class="stage">
+        <div class="stage__field">
+          <div class="hexfield" style="opacity:.07" aria-hidden="true">
+            <svg preserveAspectRatio="xMidYMid slice" viewBox="0 0 900 460"><rect width="900" height="460" fill="url(#hex)"/></svg>
+          </div>
+
+          <svg class="stage__car" viewBox="0 0 900 400" fill="none" role="img"
+               aria-label="Схема седана в профиль: зоны кузова последовательно закрываются полиуретаном">
+
+            <path d="M60 318H840" stroke="#ffffff" stroke-width="1" opacity=".16"/>
+
+            <g fill="#02100f" fill-opacity=".6" stroke="rgb(203,255,252)" stroke-width="1.5"
+               stroke-linejoin="round" opacity=".5">
+              <path d="M350 196L424 124L444 124L370 196Z"/>
+              <path d="M380 196L452 124L500 124L500 196Z"/>
+              <path d="M512 124L512 196L562 196L562 124Z"/>
+              <path d="M574 128L638 196L574 196Z"/>
+            </g>
+
+            <path d="M115 296L117 266L128 244L196 230L330 206L348 198L424 122L566 120L650 198L744 192L776 200L784 226L782 284L752 296L694 296L688 274A54 54 0 0 0 580 274L574 296L302 296L296 274A54 54 0 0 0 188 274L182 296Z"
+                  stroke="#ffffff" stroke-width="2" stroke-linejoin="round"/>
+
+            <g stroke="#ffffff" stroke-linecap="round">
+              <path d="M348 198H650" stroke-width="1.5" opacity=".5"/>
+              <path d="M380 198L376 282M506 198L504 284M568 198L570 282" stroke-width="1.2" opacity=".35"/>
+              <path d="M420 218h30M528 218h30" stroke-width="2" opacity=".5"/>
+            </g>
+
+            <g stroke="#ffffff" stroke-width="1.5" fill="#012624" stroke-linejoin="round">
+              <path d="M119 254L158 248L162 262L121 268Z"/>
+              <path d="M780 244L746 240L744 254L778 258Z"/>
+            </g>
+
+            <g stroke="#ffffff" fill="#012624">
+              <circle cx="242" cy="274" r="44" stroke-width="2"/>
+              <circle cx="242" cy="274" r="24" stroke-width="1.5" opacity=".45"/>
+              <circle cx="634" cy="274" r="44" stroke-width="2"/>
+              <circle cx="634" cy="274" r="24" stroke-width="1.5" opacity=".45"/>
+            </g>
+
+            <!-- Polyurethane zones, drawn on in application order -->
+            <g class="film" fill="rgb(203,255,252)" fill-opacity="0" stroke="rgb(203,255,252)"
+               stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+              <path data-zone="0" pathLength="1" d="M115 296L117 266L128 244L166 237L164 296Z"/>
+              <path data-zone="1" pathLength="1" d="M128 244L348 198L348 212L130 258Z"/>
+              <path data-zone="2" pathLength="1" d="M166 237L348 198L376 282L302 296L296 274A54 54 0 0 0 188 274L182 296L164 296Z"/>
+              <path data-zone="3" pathLength="1" d="M378 192L352 184L346 196L376 202Z"/>
+              <path data-zone="4" pathLength="1" d="M302 282L574 282L574 296L302 296Z"/>
+              <path data-zone="5" pathLength="1" d="M694 296L752 296L782 284L784 226L744 232L734 282Z"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="stage__readout">
+          <span class="stage__value" data-readout>0</span>
+          <span class="stage__unit">% кузова<br>под плёнкой</span>
+        </div>
+        <p class="stage__note">Зоны риска: бампер, капот, крыло, зеркало, пороги, корма.</p>
+      </div>
+
+      <div>
+        <div class="rail" aria-hidden="true"><span class="rail__fill"></span></div>
+        <ol class="steps">
+          <li class="step">
+            <span class="step__idx">01</span>
+            <div>
+              <h3 class="step__title">Дефектовка</h3>
+              <p class="body step__text">Светим лампой, отмечаем сколы и риски, фотографируем состояние до работы. Вы видите тот же список, что и мастер.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__idx">02</span>
+            <div>
+              <h3 class="step__title">Мойка и глина</h3>
+              <p class="body step__text">Трёхфазная мойка, глина по лаку, обезжиривание. Под плёнку не должно уйти ни песчинки — потом её оттуда не достать.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__idx">03</span>
+            <div>
+              <h3 class="step__title">Полировка</h3>
+              <p class="body step__text">Убираем риски и голограммы. Полиуретан прозрачный: он не прячет дефект, а показывает его крупнее.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__idx">04</span>
+            <div>
+              <h3 class="step__title">Раскрой лекал</h3>
+              <p class="body step__text">Режем плоттером под конкретный кузов. Сложные детали — с припуском на заворот за кромку.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__idx">05</span>
+            <div>
+              <h3 class="step__title">Оклейка</h3>
+              <p class="body step__text">Кладём полиуретан на мыльный раствор, тянем по форме, края заводим под кромку панели. На торце стык не читается.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step__idx">06</span>
+            <div>
+              <h3 class="step__title">Выдача</h3>
+              <p class="body step__text">Клей активируется за сутки. Сутки не мыть, дальше — обычная эксплуатация и мойка без высокого давления в упор.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ WORK ============================ -->
+<section class="section shell" id="work">
+  <div class="section__head reveal">
+    <p class="kicker">Работы</p>
+    <h2 class="h2">Из бокса</h2>
+    <p class="body">Снято у нас, без постановки. Кадры обработаны: убраны люди и лишнее, машина осталась как есть.</p>
+  </div>
+
+  <div class="work">
+    <figure class="work__item reveal shot" data-art="Слот 3:4 — седан с оклейкой капота в боксе">
+      <img src="images/work-flag.jpg" alt="Чёрный BMW с оклейкой капота в боксе Region Car" loading="lazy" decoding="async">
+      <figcaption class="shot__cap">Оклейка · капот</figcaption>
+    </figure>
+    <figure class="work__item reveal shot" data-art="Слот 3:4 — белый седан у неоновой вывески Region Car">
+      <img src="images/work-neon.jpg" alt="Белый BMW у неоновой вывески Region Car" loading="lazy" decoding="async">
+      <figcaption class="shot__cap">Тонирование · задняя полусфера</figcaption>
+    </figure>
+    <figure class="work__item reveal shot" data-art="Слот 3:4 — белый седан под гексагональным светом">
+      <img src="images/work-white.jpg" alt="Белый BMW под гексагональным светом в боксе Region Car" loading="lazy" decoding="async">
+      <figcaption class="shot__cap">Бронирование · полный кузов</figcaption>
+    </figure>
+    <figure class="work__item reveal shot" data-art="Слот 3:4 — корма седана, неон Region Car на рейках">
+      <img src="images/work-rear.jpg" alt="Задняя часть BMW M5 в боксе Region Car" loading="lazy" decoding="async">
+      <figcaption class="shot__cap">Детейлинг · полировка</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ BOOKING ============================ -->
+<section class="section shell" id="book">
+  <div class="book reveal">
+    <div class="hexfield" style="opacity:.06" aria-hidden="true">
+      <svg preserveAspectRatio="xMidYMid slice" viewBox="0 0 1200 600"><rect width="1200" height="600" fill="url(#hex)"/></svg>
+    </div>
+    <div class="book__inner">
+      <p class="kicker kicker--mist">Запись</p>
+      <h2 class="h2" style="margin-top:var(--spacing-20)">Напишите в Telegram — ответим и назовём срок</h2>
+      <p class="lede" style="margin-top:var(--spacing-24)">
+        Скажите модель и что нужно: тонировка, броня или подготовка под них.
+        Назовём цену и свободное окно. Если удобнее голосом — звоните.
+      </p>
+      <div class="book__actions">
+        <a class="btn btn--primary btn--lg" href="https://t.me/+79620066644" target="_blank" rel="noopener">
+          <svg class="btn__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M21.9 4.3 18.8 19c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.3 12.7 1.5 11.2c-1-.3-1-1 .2-1.5l19-7.3c.9-.3 1.6.2 1.2 1.9Z"/>
+          </svg>
+          Написать в Telegram
+        </a>
+        <a class="btn btn--ghost btn--lg" href="tel:+79620066644">
+          <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <path d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 6.5 6.5L17 13l4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 5.2 2 2 0 0 1 5 3h1.5Z" stroke-linejoin="round"/>
+          </svg>
+          8 962 006-66-44
+        </a>
+      </div>
+      <p class="book__fine">Замер светопропускания — при вас, до начала работы.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================ MOBILE ACTION BAR ============================ -->
+<div class="mobilebar">
+  <a class="btn btn--primary" href="https://t.me/+79620066644" target="_blank" rel="noopener">
+    <svg class="btn__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M21.9 4.3 18.8 19c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.3-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.3 12.7 1.5 11.2c-1-.3-1-1 .2-1.5l19-7.3c.9-.3 1.6.2 1.2 1.9Z"/>
+    </svg>
+    Записаться
+  </a>
+  <a class="mobilebar__tel" href="tel:+79620066644" aria-label="Позвонить 8 962 006-66-44">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <path d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 6.5 6.5L17 13l4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 3 5.2 2 2 0 0 1 5 3h1.5Z" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</div>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="footer">
+  <div class="shell">
+    <div class="footer__grid">
+      <div class="footer__col">
+        <a class="brand" href="#top" aria-label="Region Car">
+          <svg class="brand__mark" viewBox="0 0 68 40" fill="none" aria-hidden="true">
+            <path d="M2 30c10-16 24-24 32-24s24 8 32 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M14 30c6-9 14-14 20-14s14 5 20 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+          </svg>
+          <span class="brand__name">Region Car</span>
+        </a>
+      </div>
+      <div class="footer__col">
+        <h4>Услуги</h4>
+        <ul>
+          <li><a href="#tint">Тонирование</a></li>
+          <li><a href="#ppf">Бронирование</a></li>
+          <li><a href="#services">Детейлинг</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Процесс</h4>
+        <ul>
+          <li><a href="#tint">Как мы тонируем</a></li>
+          <li><a href="#ppf">Как мы бронируем</a></li>
+          <li><a href="#work">Работы</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Связь</h4>
+        <ul>
+          <li><a href="tel:+79620066644">8 962 006-66-44</a></li>
+          <li><a href="https://t.me/+79620066644" target="_blank" rel="noopener">Telegram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span id="year">2026</span> Region Car</span>
+      <span>Детейлинг · тонирование · бронирование</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- year ---------- */
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* ---------- header state ---------- */
+  var header = document.getElementById("header");
+  function headerState(){
+    header.classList.toggle("is-stuck", window.scrollY > 24);
+  }
+
+  /* ---------- reveal ----------
+     Driven from the scroll loop rather than IntersectionObserver: a jump scroll
+     or an anchor link can carry an element from below the viewport to above it
+     without ever producing an intersection, which would strand it at opacity 0. */
+  var revealEls = [].slice.call(document.querySelectorAll(".reveal"));
+
+  if (reduced){
+    revealEls.forEach(function(el){ el.classList.add("is-in"); });
+    revealEls = [];
+  }
+
+  function revealPass(){
+    if (!revealEls.length) return;
+    var trigger = window.innerHeight * 0.88;
+    revealEls = revealEls.filter(function(el){
+      if (el.getBoundingClientRect().top < trigger){
+        el.classList.add("is-in");
+        return false;
+      }
+      return true;
+    });
+  }
+
+  /* ---------- scroll-driven process scenes ---------- */
+  var scenes = [].map.call(document.querySelectorAll("[data-proc]"), function(section){
+    return {
+      el: section,
+      mode: section.getAttribute("data-mode"),
+      track: section.querySelector(".proc__track"),
+      fill: section.querySelector(".rail__fill"),
+      readout: section.querySelector("[data-readout]"),
+      steps: [].slice.call(section.querySelectorAll(".step")),
+      cut: section.querySelector(".cutline"),
+      sweep: section.querySelector(".sweep"),
+      glassFront: [].slice.call(section.querySelectorAll(".glass--front path")),
+      glassRear: [].slice.call(section.querySelectorAll(".glass--rear path")),
+      zones: [].slice.call(section.querySelectorAll(".film path")),
+      last: -1
+    };
+  });
+
+  function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
+
+  function paintTint(s, p){
+    /* Glass darkens from step 04 (термоформовка) onward, finished by step 06. */
+    var tint = clamp((p - 0.5) / 0.42, 0, 1);
+    /* ГОСТ caps the front half; only the rear half goes fully dark. */
+    s.glassFront.forEach(function(g){ g.setAttribute("fill-opacity", (0.05 + tint * 0.26).toFixed(3)); });
+    s.glassRear.forEach(function(g){ g.setAttribute("fill-opacity", (0.05 + tint * 0.90).toFixed(3)); });
+
+    /* Plotter cut draws during step 03 */
+    if (s.cut){
+      var cut = clamp((p - 0.33) / 0.17, 0, 1);
+      s.cut.setAttribute("stroke-dashoffset", (1 - cut).toFixed(3));
+      s.cut.setAttribute("opacity", cut <= 0 ? "0" : (cut >= 1 ? "0.22" : "1"));
+    }
+    /* Squeegee pass across the rear glass during step 05 */
+    if (s.sweep){
+      var sw = clamp((p - 0.67) / 0.16, 0, 1);
+      s.sweep.setAttribute("opacity", sw > 0 && sw < 1 ? "0.9" : "0");
+      s.sweep.setAttribute("x", (536 + sw * 160).toFixed(1));
+    }
+    /* Rear-half VLT readout: 95% -> 15% */
+    if (s.readout) s.readout.textContent = Math.round(95 - tint * 80);
+  }
+
+  function paintPpf(s, p){
+    var n = s.zones.length;
+    var covered = 0;
+    s.zones.forEach(function(z, i){
+      /* Zones apply one after another across the back half of the scene. */
+      var start = 0.30 + (i / n) * 0.62;
+      var k = clamp((p - start) / (0.62 / n), 0, 1);
+      z.setAttribute("stroke-dashoffset", (1 - k).toFixed(3));
+      z.setAttribute("fill-opacity", (k * 0.16).toFixed(3));
+      covered += k;
+    });
+    if (s.readout) s.readout.textContent = Math.round((covered / n) * 100);
+  }
+
+  function update(){
+    headerState();
+    revealPass();
+
+    var vh = window.innerHeight;
+    scenes.forEach(function(s){
+      var r = s.track.getBoundingClientRect();
+      var span = r.height - vh;
+      var p = span > 0 ? clamp(-r.top / span, 0, 1) : (r.top < vh * 0.5 ? 1 : 0);
+
+      if (s.fill) s.fill.parentNode.style.setProperty("--p", p.toFixed(4));
+
+      var n = s.steps.length;
+      var idx = clamp(Math.floor(p * n), 0, n - 1);
+      if (idx !== s.last){
+        s.steps.forEach(function(st, i){
+          st.classList.toggle("is-active", i === idx);
+          st.classList.toggle("is-done", i < idx);
+        });
+        s.last = idx;
+      }
+
+      if (s.mode === "ppf") paintPpf(s, p); else paintTint(s, p);
+    });
+  }
+
+  /* Reduced motion: the layout already shows every step at once, so paint the
+     finished state once and stop driving the scenes from scroll. */
+  if (reduced){
+    scenes.forEach(function(s){
+      s.steps.forEach(function(st){ st.classList.add("is-active"); });
+      if (s.fill) s.fill.parentNode.style.setProperty("--p", "1");
+      if (s.mode === "ppf") paintPpf(s, 1); else paintTint(s, 1);
+    });
+    scenes = [];
+  }
+
+  var ticking = false;
+  function onScroll(){
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function(){ update(); ticking = false; });
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+
+  /* initial paint: show first step active even before any scroll */
+  scenes.forEach(function(s){
+    if (s.steps[0]) s.steps[0].classList.add("is-active");
+  });
+  update();
+
+  /* ---------- missing photo -> keep the intentional placeholder ---------- */
+  document.querySelectorAll(".shot img, .hero__media img").forEach(function(img){
+    img.addEventListener("error", function(){ img.style.display = "none"; });
+  });
+})();
+</script>
+</body>
+</html>
