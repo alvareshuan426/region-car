@@ -406,12 +406,78 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   color:var(--color-lavender-phosphor);
 }
 .stat__unit{font-size:.36em;letter-spacing:0}
+.stat__pre{
+  font-size:.26em;letter-spacing:.1em;text-transform:uppercase;
+  vertical-align:.7em;margin-right:.22em;
+  color:var(--color-silver-mist);
+}
 .stat__label{
   margin-top:var(--spacing-12);
   font-size:13px;font-weight:var(--fw-regular);
   letter-spacing:.055em;text-transform:uppercase;
   color:var(--color-liquid-mist);
 }
+
+/* ============================================================
+   PRICE
+   Rows follow the reference's "Feature Row" rhythm — hairline
+   dividers, no cards. The wash block is the Statistic Counter
+   component: three columns, large figure, label below.
+   ============================================================ */
+
+.price{border-top:1px solid var(--hairline)}
+
+.price__row{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:var(--spacing-20);
+  padding-block:var(--spacing-24);
+  border-bottom:1px solid var(--hairline);
+}
+
+.price__name{
+  color:var(--color-liquid-mist);
+  font-size:clamp(1rem,1.6vw,1.1875rem);
+  line-height:1.4;
+  text-wrap:pretty;
+}
+.price__note{
+  display:block;margin-top:5px;
+  font-size:var(--text-caption);
+  letter-spacing:var(--tracking-caption);
+  text-transform:uppercase;
+  color:var(--color-silver-mist);
+}
+
+.price__value{
+  flex:none;
+  display:inline-flex;align-items:baseline;gap:9px;
+  color:var(--color-platinum);
+  font-size:clamp(1.25rem,2.2vw,1.5rem);
+  font-weight:var(--fw-medium);
+  letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.price__from{
+  font-size:var(--text-caption);
+  font-weight:var(--fw-regular);
+  letter-spacing:var(--tracking-caption);
+  text-transform:uppercase;
+  color:var(--color-silver-mist);
+}
+
+.wash{
+  margin-top:var(--spacing-64);
+  background-color:var(--color-liquid-kelp);
+  border-radius:var(--radius-cards);
+  padding:clamp(28px,4vw,48px);
+}
+.wash__grid{
+  display:grid;gap:var(--spacing-32);
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  margin-top:var(--spacing-28);
+}
+.wash__grid .stat__num{font-size:clamp(2.4rem,5vw,3.8rem)}
 
 /* ============================================================
    SECTION SHELL
@@ -771,6 +837,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
       <a href="#tint">Тонирование</a>
       <a href="#ppf">Бронирование</a>
       <a href="#work">Работы</a>
+      <a href="#price">Цены</a>
       <a href="#book">Контакты</a>
     </nav>
 
@@ -819,20 +886,20 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   </div>
 </section>
 
-<!-- ЗАГЛУШКА: подтвердить реальные цифры перед публикацией -->
+<!-- Стартовые цены — из прайса студии -->
 <section class="shell">
   <div class="stats reveal">
     <div class="stat">
-      <p class="stat__num">200<span class="stat__unit"> мкм</span></p>
-      <p class="stat__label">Толщина полиуретана</p>
+      <p class="stat__num"><span class="stat__pre">от</span>3&nbsp;500<span class="stat__unit">&nbsp;₽</span></p>
+      <p class="stat__label">Тонирование задней полусферы</p>
     </div>
     <div class="stat">
-      <p class="stat__num">1<span class="stat__unit"> день</span></p>
-      <p class="stat__label">Срок тонирования</p>
+      <p class="stat__num"><span class="stat__pre">от</span>31&nbsp;000<span class="stat__unit">&nbsp;₽</span></p>
+      <p class="stat__label">Бронирование зон риска</p>
     </div>
     <div class="stat">
-      <p class="stat__num">5<span class="stat__unit"> лет</span></p>
-      <p class="stat__label">Гарантия на плёнку</p>
+      <p class="stat__num"><span class="stat__pre">от</span>12&nbsp;000<span class="stat__unit">&nbsp;₽</span></p>
+      <p class="stat__label">Полировка кузова</p>
     </div>
   </div>
 </section>
@@ -841,10 +908,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <section class="section shell" id="services">
   <div class="section__head reveal">
     <p class="kicker">Услуги</p>
-    <h2 class="h2">Три вещи, которые мы делаем хорошо</h2>
+    <h2 class="h2">Три направления, вокруг которых всё остальное</h2>
     <p class="body">
-      Не берём всё подряд. Тонирование, полиуретан и подготовка кузова под них —
-      это один технологический процесс, и он у нас отлажен.
+      Тонирование, полиуретан и подготовка кузова под них — один технологический
+      процесс. Полировка, керамика, химчистка и мойка — то, из чего эта подготовка
+      состоит; их же берём и отдельной работой.
     </p>
   </div>
 
@@ -889,7 +957,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           Полировка, химчистка салона, керамика. Перед плёнкой кузов полируем всегда:
           полиуретан прозрачный, и любая риска под ним останется навсегда.
         </p>
-        <p class="svc__meta"><span>Полировка</span><span>Химчистка</span><span>Керамика</span><span>Предпродажная</span></p>
+        <p class="svc__meta"><span>Полировка</span><span>Керамика</span><span>Химчистка</span><span>Мойка</span><span>Предпродажная</span></p>
       </a>
     </div>
 
@@ -1194,6 +1262,75 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   </div>
 </section>
 
+<!-- ============================ PRICE ============================ -->
+<section class="section shell" id="price">
+  <div class="section__head reveal">
+    <p class="kicker">Цены</p>
+    <h2 class="h2">Прайс</h2>
+    <p class="body">
+      «От» — стартовая цена: она зависит от модели, состояния кузова и объёма работ.
+      Точную сумму называем после осмотра, до начала работы. Без «от» — цена фиксированная.
+    </p>
+  </div>
+
+  <ul class="price reveal">
+    <li class="price__row">
+      <span class="price__name">Тонирование<span class="price__note">Задняя полусфера</span></span>
+      <span class="price__value"><span class="price__from">от</span>3&nbsp;500&nbsp;₽</span>
+    </li>
+    <li class="price__row">
+      <span class="price__name">Бронирование<span class="price__note">Зоны риска, комплект</span></span>
+      <span class="price__value"><span class="price__from">от</span>31&nbsp;000&nbsp;₽</span>
+    </li>
+    <li class="price__row">
+      <span class="price__name">Полировка кузова</span>
+      <span class="price__value"><span class="price__from">от</span>12&nbsp;000&nbsp;₽</span>
+    </li>
+    <li class="price__row">
+      <span class="price__name">Ремонт лобовых стёкол</span>
+      <span class="price__value"><span class="price__from">от</span>500&nbsp;₽</span>
+    </li>
+    <li class="price__row">
+      <span class="price__name">Нанесение керамических составов на ЛКП</span>
+      <span class="price__value"><span class="price__from">от</span>9&nbsp;000&nbsp;₽</span>
+    </li>
+    <li class="price__row">
+      <span class="price__name">Полная химчистка салона</span>
+      <span class="price__value"><span class="price__from">от</span>11&nbsp;000&nbsp;₽</span>
+    </li>
+    <li class="price__row">
+      <span class="price__name">Предпродажная влажная уборка салона</span>
+      <span class="price__value">2&nbsp;500&nbsp;₽</span>
+    </li>
+    <li class="price__row">
+      <span class="price__name">Установка ПТФ<span class="price__note">Противотуманные фары</span></span>
+      <span class="price__value">5&nbsp;000&nbsp;₽</span>
+    </li>
+    <li class="price__row">
+      <span class="price__name">Установка контурной подсветки салона</span>
+      <span class="price__value">18&nbsp;000&nbsp;₽</span>
+    </li>
+  </ul>
+
+  <div class="wash reveal">
+    <p class="kicker kicker--mist">Мойка</p>
+    <div class="wash__grid">
+      <div class="stat">
+        <p class="stat__num">1&nbsp;800<span class="stat__unit">&nbsp;₽</span></p>
+        <p class="stat__label">Седан</p>
+      </div>
+      <div class="stat">
+        <p class="stat__num">2&nbsp;300<span class="stat__unit">&nbsp;₽</span></p>
+        <p class="stat__label">Кроссовер</p>
+      </div>
+      <div class="stat">
+        <p class="stat__num">2&nbsp;800<span class="stat__unit">&nbsp;₽</span></p>
+        <p class="stat__label">Джип</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============================ BOOKING ============================ -->
 <section class="section shell" id="book">
   <div class="book reveal">
@@ -1270,6 +1407,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
           <li><a href="#tint">Как мы тонируем</a></li>
           <li><a href="#ppf">Как мы бронируем</a></li>
           <li><a href="#work">Работы</a></li>
+          <li><a href="#price">Цены</a></li>
         </ul>
       </div>
       <div class="footer__col">
